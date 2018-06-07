@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<!--独立配置-->
+<struts>
+    <!--用户管理-->
+    <package name="user" namespace="/user" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>
+            login,add,findAll,findOne,delete,update,logon,checkLogin,
+        </global-allowed-methods>
+        <!--登陆，添加，分页查询，查找一个，删除，更新，退出,登陆状态。<ajax>-->
+        <action name="user_*" class="com.hill.ybsj.controller.UserController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <!--显示用户界面，如果未登录转到登陆页，如果登陆了就并把用户功能列表获取。-->
+        <action name="userManage" class="com.hill.ybsj.controller.UserController" method="showUserPage">
+            <result name="success">/WEB-INF/jsp/home/user/userManageFrame.jsp</result>
+            <result name="error" type="redirect">/index.jsp</result>
+        </action>
+        <!--显示用户列表界面，并获取用户可见省份。-->
+        <action name="user_list_page" class="com.hill.ybsj.controller.UserController" method="showUserList">
+            <result name="success">/WEB-INF/jsp/home/user/userList.jsp</result>
+        </action>
+
+        <action name="surveyor_*" class="com.hill.ybsj.controller.SurveyorController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+
+        <!--调查员管理列表页面,获取用户可见城市。-->
+        <action name="surveyor_list_page" class="com.hill.ybsj.controller.SurveyorController"
+                method="showSurveyorList">
+            <result name="success">/WEB-INF/jsp/home/user/surveyor.jsp</result>
+        </action>
+
+        <action name="gwUser" class="com.hill.ybsj.controller.GwUserController" method="execute"/>
+        <!--/user/showGwUserPage-->
+        <action name="showGwUserPage">
+            <result>/WEB-INF/jsp/home/user/impGwUser.jsp</result>
+        </action>
+
+        <!--样本查看员-->
+        <!--/user/ybckPage-->
+        <action name="ybckPage">
+            <result>/WEB-INF/jsp/home/gys/yanbenchakan.jsp</result>
+        </action>
+
+        <action name="ybck" class="com.hill.ybsj.controller.YanbenController" method="getData">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+    </package>
+
+    <!--专项配置操作-->
+    <package name="config" namespace="/config" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>add,findAll,delete,update,findTabCol,findOne,checkfId,findBytypeId,getMaxcol</global-allowed-methods>
+        <!--添加，分页查询，查找一个，删除，更新,查找表字段。<ajax>-->
+        <action name="config_*" class="com.hill.ybsj.controller.ConfigController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <!--显示专项配置列表页面，并获取用户可见专项。-->
+        <action name="config_list_page" class="com.hill.ybsj.controller.ConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/configuration.jsp</result>
+        </action>
+
+        <action name="sconfig_*" class="com.hill.ybsj.controller.SConfigController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+
+        <action name="sc_list_page" class="com.hill.ybsj.controller.SConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
+        </action>
+        <!--专项维护-->
+        <action name="mantainconfig_*" class="com.hill.ybsj.controller.MantainConfigController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <action name="mantainconfig_page" class="com.hill.ybsj.controller.MantainConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/mantain_config.jsp</result>
+        </action>
+        <!--专项字段-->
+        <action name="simplecol_*" class="com.hill.ybsj.controller.SimpleColController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+    </package>
+
+    <!--预约样本-->
+    <package name="survey" namespace="/survey" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+        <global-allowed-methods>
+            getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData,getSurveyUser
+        </global-allowed-methods>
+        <action name="survey_*" class="com.hill.ybsj.controller.SurveyController" method="{1}">
+
+        </action>
+        <!--显示页面-->
+        <action name="invitation">
+            <result>/WEB-INF/jsp/home/gys/invitation.jsp</result>
+        </action>
+        <action name="invited">
+            <result>/WEB-INF/jsp/home/gys/invited.jsp</result>
+        </action>
+    </package>
+    <!-- 功能管理 -->
+    <package name="func" namespace="/func" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>findFuncAll,findOne,update,delete,add,checkfId</global-allowed-methods>
+        <!-- 功能 列表查询，添加，查询，编辑 ,删除-->
+        <action name="func_*" class="com.hill.ybsj.controller.FuncController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <!--显示功能管理列表页面-->
+        <action name="func_list_page" class="com.hill.ybsj.controller.FuncController" method="showfuncpage">
+            <result name="success">/WEB-INF/jsp/home/user/func.jsp</result>
+        </action>
+    </package>
+    <!-- 角色功能管理 -->
+    <package name="rolfc" namespace="/rolfc" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>findAll,findOne,update,delete,add,findnofuncbyrole</global-allowed-methods>
+        <action name="rolfc_*" class="com.hill.ybsj.controller.RoleFuncController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <action name="role_func_page" class="com.hill.ybsj.controller.RoleFuncController" method="showrolfcpage">
+            <result name="success">/WEB-INF/jsp/home/user/role_func.jsp</result>
+        </action>
+    </package>
+    <package name="file" namespace="/file" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>create,download</global-allowed-methods>
+        <action name="file_*" class="com.hill.ybsj.controller.FileController" method="{1}">
+            <!--创建文件-->
+            <result name="createSuccess" type="json">
+                <param name="root">dataMap</param>
+            </result>
+            <!--下载文件-->
+            <result name="downloadSuccess" type="stream">
+                <param name="inputName">download</param>
+                <param name="contentDisposition">attachment;fileName=${fileName}</param>
+                <param name="bufferSize">1048576</param>
+            </result>
+            <!--下载空文件-->
+            <result name="downloadError" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+    </package>
+    <!-- 机构管理 -->
+    <package name="org" namespace="/org" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.ybsj.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>findAll,findOne,delete,add,checkId,showporglist,showcitylist</global-allowed-methods>
+        <action name="org_*" class="com.hill.ybsj.controller.OrgController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <action name="orgpage" class="com.hill.ybsj.controller.OrgController" method="showorgpage">
+            <result name="success">
+                /WEB-INF/jsp/home/user/org.jsp
+            </result>
+        </action>
+        <action name="sc_list_page" class="com.hill.ybsj.controller.SConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
+        </action>
+    </package>
+</struts>

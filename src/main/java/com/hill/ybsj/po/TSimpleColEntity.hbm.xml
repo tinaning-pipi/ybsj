@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.hill.ybsj.po.TSimpleColEntity" table="T_SIMPLE_COL" schema="PRO_HN2018_DATA">
+        <id name="col" column="COL"/>
+        <property name="colname" column="COL_NAME"/>
+        <property name="stypeId" column="TYPE_ID"/>
+        <property name="ordernum" column="ORDER_NUM"/>
+        <property name="isprov" column="IS_PROV"/>
+        <property name="iscity" column="IS_CITY"/>
+        <property name="iscusttype" column="IS_CUSTTYPE"/>
+        <property name="isorder" column="IS_ORDER"/>
+        <property name="isaddr" column="IS_ADDR"/>
+    </class>
+</hibernate-mapping>
