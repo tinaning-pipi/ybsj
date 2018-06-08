@@ -5,6 +5,7 @@ import com.hill.ybsj.service.IUserService;
 import com.opensymphony.xwork2.ActionSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public class UserController extends ActionSupport {
     private int currentTotal, current;
     //省份id
     private String province;
+    @Autowired
+    private HttpSession session;
 
     public Map<String, Object> getDataMap() {
         return dataMap;
@@ -122,6 +125,24 @@ public class UserController extends ActionSupport {
     public String checkLogin() throws Exception {
         dataMap = new HashMap<>();
         dataMap.put("isLogin", userService.checkLogin());
+        return ActionSupport.SUCCESS;
+    }
+    //修改密码
+    public String updatepwd() throws Exception{
+        dataMap = new HashMap<>();
+        dataMap=userService.updatepwd(userEntity);
+        return ActionSupport.SUCCESS;
+    }
+    //检查输入的原密码和存的原密码是否相同
+    public String checkpwd(){
+        dataMap = new HashMap<>();
+        String oldupwd=session.getAttribute("upwd").toString();
+        if(userEntity.getUpwd()!=oldupwd&&!userEntity.getUpwd().equals(oldupwd)){
+            dataMap.put("msg",0);
+        }
+        else{
+            dataMap.put("msg",1);
+        }
         return ActionSupport.SUCCESS;
     }
 }

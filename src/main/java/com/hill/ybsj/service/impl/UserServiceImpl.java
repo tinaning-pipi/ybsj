@@ -47,6 +47,7 @@ public class UserServiceImpl implements IUserService {
                             session.setAttribute("userId", result.getUserid());
                             session.setAttribute("uorg", result.getOrgid());
                             session.setAttribute("urole", result.getUrole());
+                            session.setAttribute("upwd", result.getUpwd());
                             //记录用户登陆信息
                             userLoginEntity.setUserid(result.getUserid());
                             userDao.userLoginInfoExec(userLoginEntity, false);
@@ -347,6 +348,41 @@ public class UserServiceImpl implements IUserService {
         if (userid != null && !"".equals(userid)) {
             request.setAttribute("orgs", userDao.getVisibleProvince(result.getUrole(), result.getOrgid()));
         }
+    }
+
+    @Override
+    public Map<String, Object> updatepwd(TUserEntity userEntity) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
+        if (userEntity != null
+                && userEntity.getUserid() != null && userEntity.getUpwd() != null
+                && !"".equals(userEntity.getUserid()) && !"".equals(userEntity.getUpwd())) {
+            try {
+                TUserEntity result = userDao.userFindOne(userEntity.getUserid());
+                if (result != null) {
+                    result.setUpwd(userEntity.getUpwd());
+                    userDao.userUpdate(result);
+                    map.put("message", "修改成功");
+                    } else {
+                        //修改失败
+                        error = 4;
+                        map.put("message", "修改失败");
+                    }
+
+            } catch (Exception e) {
+                //修改失败
+                error = 2;
+                map.put("message", "修改失败");
+                e.printStackTrace();
+            }
+
+        } else {
+            //非法操作
+            error = 1;
+            map.put("message", "非法操作");
+        }
+        map.put("error", error);
+        return map;
     }
 
 }

@@ -34,4 +34,6 @@ public interface IUserService {
 
     //得到用户的可见的省份信息
     void getVisibleProvince() throws Exception;
+
+    Map<String, Object> updatepwd(TUserEntity userEntity) throws Exception;
 }

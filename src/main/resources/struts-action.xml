@@ -23,7 +23,7 @@
         <!--自定义拦截器结束-->
 
         <global-allowed-methods>
-            login,add,findAll,findOne,delete,update,logon,checkLogin,
+            login,add,findAll,findOne,delete,update,logon,checkLogin,updatepwd,checkpwd
         </global-allowed-methods>
         <!--登陆，添加，分页查询，查找一个，删除，更新，退出,登陆状态。<ajax>-->
         <action name="user_*" class="com.hill.ybsj.controller.UserController" method="{1}">
